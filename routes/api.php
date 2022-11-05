@@ -23,7 +23,69 @@ Route::middleware(['cors'])->group(function () {
             ->header('Content-type','application/json')
             ->header('Access-Control-Allow-Origin', '*');
     });
+
+    Route::post('/enum',function(){
+
+        if($_SERVER['REQUEST_METHOD']==="POST"){
+            $json = file_get_contents('php://input');
+            //var_dump($json);die;
+
+            // Converts it into a PHP object
+            $data = json_decode($json ,true);
+           // var_dump($data);die;
+
+            $slackUsername="eddyenin";
+            $operands = array('addition','subtraction','multiplication');
+            $operation_type = strtolower($data['operation_type']);
+            $x = $data['x'];
+            $y = $data['y'];
+
+            if($operation_type==='' || !in_array($operation_type, $operands)){
+                die( json_encode(['error' => 'INVALID OPERATION TYPE']));
+            }
+
+            if(is_nan($x)){
+             die( json_encode(['error' => 'X is not an integer']));
+            }
+
+            if(is_nan($y)){
+             die( json_encode(['error' => 'Y is not an integer']));
+            }
+
+            $result = "";
+
+            if(in_array($operation_type, $operands) && $operation_type==='addition'){
+                $result = $x + $y;
+            }
+
+            if(in_array($operation_type, $operands) && $operation_type==='multiplication'){
+                $result = $x * $y;
+            }
+
+
+            if(in_array($operation_type, $operands) && $operation_type==='subtraction'){
+                $result = $x - $y;
+            }
+
+
+            $details = array(
+                "slackUsername"=> $slackUsername,
+                "result"=>$result,
+                "operation_type"=>$operation_type
+            );
+
+            // Use json_encode() function
+            $json = json_encode($details);
+
+            // Display the output
+            echo($json);
+        }
+        else {
+            die( json_encode(['error' => 'NOTHING FOR YOU TO ' .$_SERVER['REQUEST_METHOD'].' HERE PAL']));
+        }
+    });
  });
+
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
