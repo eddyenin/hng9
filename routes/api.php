@@ -28,11 +28,10 @@ Route::middleware(['cors'])->group(function () {
 
         if($_SERVER['REQUEST_METHOD']==="POST"){
             $json = file_get_contents('php://input');
-            //var_dump($json);die;
 
             // Converts it into a PHP object
             $data = json_decode($json ,true);
-           // var_dump($data);die;
+
 
             $slackUsername="eddyenin";
             $operands = array('addition','subtraction','multiplication');
@@ -40,7 +39,7 @@ Route::middleware(['cors'])->group(function () {
             $x = $data['x'];
             $y = $data['y'];
 
-            if($operation_type==='' || !in_array($operation_type, $operands)){
+            if($operation_type ==='' || !in_array($operation_type, $operands)){
                 die( json_encode(['error' => 'INVALID OPERATION TYPE']));
             }
 
@@ -81,7 +80,7 @@ Route::middleware(['cors'])->group(function () {
             echo($json);
         }
         else {
-            die( json_encode(['error' => 'NOTHING FOR YOU TO ' .$_SERVER['REQUEST_METHOD'].' HERE PAL']));
+            die( json_encode(['error' => 'You did rubbish' .$_SERVER['REQUEST_METHOD'].' my guy']));
         }
     });
  });
