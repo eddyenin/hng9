@@ -35,9 +35,9 @@ Route::middleware(['cors'])->group(function () {
 
             $slackUsername="eddyenin";
             $operands = array('addition','subtraction','multiplication');
-            $operation_type = strtolower($data['operation_type']);
-            $x = $data['x'];
-            $y = $data['y'];
+            $operation_type = (strtolower($data['operation_type']) ? strtolower($data['operation_type']) : strtolower($_POST['operation_type']));
+            $x = ($data['x'] ? $data['x']:$_POST['x']);
+            $y = ($data['y'] ? $data['y']:$_POST['y']);
 
             if($operation_type ==='' || !in_array($operation_type, $operands)){
                 die( json_encode(['error' => 'INVALID OPERATION TYPE']));
